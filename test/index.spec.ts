@@ -1,5 +1,6 @@
-import { createContainer } from "../src/di-container";
+import { createContainer, DIContainer } from "../src/di-container";
 import { Injectable } from "../src/injectable";
+import { OnInstantiation } from "../src/types";
 
 @Injectable()
 class ScratchPole {}
@@ -20,8 +21,13 @@ class DogFood {
 }
 
 @Injectable()
-class Dog {
+class Dog implements OnInstantiation {
   constructor(public readonly food: DogFood) {}
+  public counter = 0;
+  onInstantiation() {
+    console.log("asdasdasdasd");
+    this.counter += 1;
+  }
 }
 
 @Injectable()
@@ -37,17 +43,35 @@ class Root {
   }
 }
 
-describe("test", () => {
-  it("Should be working", () => {
-    const container = createContainer(Root);
+@Injectable()
+class SelfReferencingRoot {
+  constructor(private readonly root: SelfReferencingRoot) {}
+}
 
-    const root = container.get(Root);
-    root.logDogFood();
-    root.setDogFood("Fishyfish!");
+describe("slim-di", () => {
+  let container: DIContainer;
 
-    container.get(Root).logDogFood();
+  beforeEach(async () => {
+    container = await createContainer(Root);
+  });
 
+  it("Instantiates the classes correctly", () => {
     expect(container.get(Root)).toBeDefined();
     expect(container.get(DogFood)).toBeInstanceOf(DogFood);
+  });
+
+  it("Should only create singletons", () => {
+    expect(container.get(Root)).toEqual(container.get(Root));
+  });
+
+  it("Should not be able to create circular references", async () => {
+    await expect(() =>
+      createContainer(SelfReferencingRoot)
+    ).rejects.toBeInstanceOf(RangeError);
+  });
+
+  it("Should trigger the onInstantiation hook", async () => {
+    const dog = container.get(Dog);
+    expect(dog.counter).toBe(1);
   });
 });
