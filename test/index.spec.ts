@@ -1,6 +1,6 @@
 import { createContainer, DIContainer } from "../src/di-container";
 import { Injectable } from "../src/injectable";
-import { OnInstantiation } from "../src/types";
+import { OnInit } from "../src/types";
 
 @Injectable()
 class ScratchPole {}
@@ -21,11 +21,10 @@ class DogFood {
 }
 
 @Injectable()
-class Dog implements OnInstantiation {
+class Dog implements OnInit {
   constructor(public readonly food: DogFood) {}
   public counter = 0;
-  onInstantiation() {
-    console.log("asdasdasdasd");
+  onInit() {
     this.counter += 1;
   }
 }

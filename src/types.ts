@@ -3,13 +3,11 @@ export interface Type<T = unknown> extends Function {
   new (...args: any[]): T;
 }
 
-export interface OnInstantiation {
-  onInstantiation(): void | Promise<void>;
+export interface OnInit {
+  onInit(): void | Promise<void>;
 }
 
-export const hasInstantiationHook = (
-  value: unknown
-): value is OnInstantiation =>
+export const hasInstantiationHook = (value: unknown): value is OnInit =>
   value !== null &&
   value !== undefined &&
-  (value as OnInstantiation)?.onInstantiation !== undefined;
+  (value as OnInit)?.onInit !== undefined;

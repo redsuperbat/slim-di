@@ -1,6 +1,6 @@
 # Slim DI
 
-Minimalistic DI library weighing in at only 695 Bytes. Built for usage with decorators.
+Minimalistic DI library weighing in at <1 kB. Built for usage with decorators and `reflect-metadata`.
 
 ## Installation
 
@@ -61,8 +61,8 @@ import { PrismaClient } from "@prisma/client";
 import { Injectable, createContainer } from 'slim-di';
 
 @Injectable()
-export class Prisma extends PrismaClient implements OnInstantiation {
-  async onInstantiation() {
+export class Prisma extends PrismaClient implements OnInit {
+  async onInit() {
     await this.$connect();
   }
 };
@@ -85,11 +85,11 @@ import "reflect-metadata";
 import { PrismaClient } from "@prisma/client";
 import express from "express";
 import { createContainer, Injectable } from "slim-di";
-import { OnInstantiation } from "slim-di/types";
+import { OnInit } from "slim-di/types";
 
 @Injectable()
-export class Prisma extends PrismaClient implements OnInstantiation {
-  async onInstantiation() {
+export class Prisma extends PrismaClient implements OnInit {
+  async onInit() {
     console.log("Connecting to prisma...");
     await this.$connect();
     console.log("Connected!");
@@ -117,7 +117,7 @@ export class UserRouter {
 }
 
 @Injectable()
-export class MyApplication implements OnInstantiation {
+export class MyApplication implements OnInit {
   constructor(
     private readonly express: ExpressClient,
     private readonly userRouter: UserRouter
@@ -125,7 +125,7 @@ export class MyApplication implements OnInstantiation {
 
   private port = 3000;
 
-  onInstantiation() {
+  onInit() {
     this.userRouter.register();
     this.express.app.listen(this.port, () => {
       console.log("Listening on port", this.port);
