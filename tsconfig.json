@@ -13,7 +13,7 @@
     "skipDefaultLibCheck": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "types": ["vitest/importMeta", "reflect-metadata"]
+    "types": ["jest", "reflect-metadata", "node"]
   },
   "exclude": ["node_modules"]
 }

@@ -1,5 +1,3 @@
-import { describe, expect, it } from "vitest";
-import { Inject } from "../src";
 import { createContainer } from "../src/di-container";
 import { Injectable } from "../src/injectable";
 
@@ -11,37 +9,43 @@ class Fish {}
 @Injectable()
 class Cat {
   constructor(
-    @Inject(Fish)
     private readonly food: Fish,
-    @Inject(ScratchPole)
     private readonly pole: ScratchPole
   ) {}
 }
 
 @Injectable()
-class DogFood {}
+class DogFood {
+  type = "Meat!";
+}
 
 @Injectable()
 class Dog {
-  constructor(
-    @Inject(DogFood)
-    private readonly food: DogFood
-  ) {}
+  constructor(public readonly food: DogFood) {}
 }
 
 @Injectable()
 class Root {
-  constructor(
-    @Inject(Cat)
-    private readonly cat: Cat,
-    @Inject(Dog)
-    private readonly dog: Dog
-  ) {}
+  constructor(private readonly cat: Cat, private readonly dog: Dog) {}
+
+  setDogFood(type: string) {
+    this.dog.food.type = type;
+  }
+
+  logDogFood() {
+    console.log(this.dog.food);
+  }
 }
 
 describe("test", () => {
   it("Should be working", () => {
     const container = createContainer(Root);
+
+    const root = container.get(Root);
+    root.logDogFood();
+    root.setDogFood("Fishyfish!");
+
+    container.get(Root).logDogFood();
 
     expect(container.get(Root)).toBeDefined();
     expect(container.get(DogFood)).toBeInstanceOf(DogFood);

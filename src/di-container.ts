@@ -1,22 +1,22 @@
-import { INJECTABLE_METADATA, INJECT_METADATA } from "./tokens";
-import { ClassDefinition } from "./types";
+import { INJECTABLE_METADATA } from "./tokens";
+import { Type } from "./types";
 
 export interface DIContainer {
-  get<T = unknown>(token: ClassDefinition<T>): T;
+  get<T = unknown>(token: Type<T>): T;
 }
 
-export const createContainer = <T>(root: ClassDefinition<T>): DIContainer => {
-  const container = new Map<ClassDefinition, any>();
+export const createContainer = <T>(root: Type<T>): DIContainer => {
+  const container = new Map<Type, any>();
 
-  const instantiateDeps = (token: ClassDefinition): any => {
-    if (!Reflect.hasMetadata(INJECTABLE_METADATA, token.prototype)) {
+  const instantiateDeps = (token: Type): unknown => {
+    if (!Reflect.hasMetadata(INJECTABLE_METADATA, token)) {
       throw new Error(
         "Trying to inject a dependency which is not annotated with the @Injectable decorator"
       );
     }
 
-    const dependencyMetadata: ClassDefinition[] = Reflect.getMetadata(
-      INJECT_METADATA,
+    const dependencyMetadata: Type[] = Reflect.getMetadata(
+      INJECTABLE_METADATA,
       token
     );
 

@@ -1,10 +1,10 @@
 import { INJECT_METADATA } from "./tokens";
-import { ClassDefinition } from "./types";
+import { Type } from "./types";
 
 export const Inject =
-  (token: ClassDefinition): ParameterDecorator =>
+  (token: Type): ParameterDecorator =>
   (target) => {
-    const dependencyMetadata: ClassDefinition[] =
+    const dependencyMetadata: Type[] =
       Reflect.getMetadata(INJECT_METADATA, target) ?? [];
 
     dependencyMetadata.unshift(token);
