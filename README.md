@@ -54,7 +54,7 @@ main()
 
 ## Lifecycle hooks
 
-`slim-di` exposes one lifecycle hook called `onInstantiation` which triggers during instantiation and can be used to connect to databases or other init-work. To trigger the hook on your class instance you must call the `DIContainer.init` method.
+`slim-di` exposes one lifecycle hook called `onInit` which triggers during instantiation and can be used to connect to databases or other init-work. To trigger the hook on your class instance you must call the `DIContainer.init` method.
 
 ```ts
 import { PrismaClient } from "@prisma/client";
