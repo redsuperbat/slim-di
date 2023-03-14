@@ -72,6 +72,8 @@ describe("slim-di", () => {
 
   it("Should trigger the onInstantiation hook", async () => {
     const dog = container.get(Dog);
+    expect(dog.counter).toBe(0);
+    await container.init();
     expect(dog.counter).toBe(1);
   });
 });

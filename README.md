@@ -43,7 +43,7 @@ class FisherManRoot {
 
 
 async function main(){
-  const container = await createContainer(FisherManRoot);
+  const container = createContainer(FisherManRoot);
   // Logs true
   console.log(container.get(FishingBoat) === container.get(FishingBoat))
 }
@@ -52,7 +52,7 @@ main()
 
 ## Lifecycle hooks
 
-`slim-di` exposes one lifecycle hook called `onInstantiation` which triggers during instantiation and can be used to connect to databases or other init-work.
+`slim-di` exposes one lifecycle hook called `onInstantiation` which triggers during instantiation and can be used to connect to databases or other init-work. To trigger the hook on your class instance you must call the `DIContainer.init` method.
 
 ```ts
 import { PrismaClient } from 'prisma';
@@ -67,7 +67,7 @@ export class Prisma extends Prisma implements OnInstantiation {
 
 
 async function main() {
-  const container = await createContainer(Prisma);
+  const container = await createContainer(Prisma).init();
   const data = await container.get(Prisma).entity.findMany();
 }
 
@@ -127,7 +127,7 @@ export class MyApplication implements OnInstantiation {
 
 
 async function main(){
-  const container = await createContainer()
+  const container = await createContainer().init();
 }
 
 ```
