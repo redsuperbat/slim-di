@@ -1,7 +1,7 @@
 {
   "name": "slim-di",
-  "version": "0.0.3",
-  "description": "",
+  "version": "0.0.4",
+  "description": "Minimal dependency injection framework using decorators",
   "main": "./dist/index.cjs",
   "exports": {
     ".": {
@@ -18,7 +18,11 @@
     "lint": "eslint .",
     "test": "jest"
   },
-  "keywords": [],
+  "keywords": [
+    "Dependency Injection",
+    "DI",
+    "Decorators"
+  ],
   "author": "Max Netterberg",
   "license": "MIT",
   "peerDependencies": {
