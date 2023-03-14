@@ -15,6 +15,8 @@ The first thing you need to do is declare your root class. By default `slim-di` 
 
 
 ```ts
+import "reflect-metadata";
+
 import { Injectable, createContainer } from 'slim-di';
 
 @Injectable()
@@ -56,7 +58,7 @@ main()
 
 ```ts
 import { PrismaClient } from 'prisma';
-import { Injectable } from 'slim-di';
+import { Injectable, createContainer } from 'slim-di';
 
 @Injectable()
 export class Prisma extends Prisma implements OnInstantiation {
@@ -78,56 +80,62 @@ async function main() {
 Here is a small example using an express server and prisma.
 
 ```ts
-import { Injectable } from 'slim-di';
-import express from 'express';
-import { PrismaClient } from '@prisma/client';
+import "reflect-metadata";
+
+import { PrismaClient } from "@prisma/client";
+import express from "express";
+import { createContainer, Injectable } from "slim-di";
+import { OnInstantiation } from "slim-di/types";
 
 @Injectable()
 export class Prisma extends PrismaClient implements OnInstantiation {
   async onInstantiation() {
+    console.log("Connecting to prisma...");
     await this.$connect();
+    console.log("Connected!");
   }
-};
+}
 
 @Injectable()
 export class ExpressClient {
   public app = express();
 }
 
-
 @Injectable()
-export class UserRouter implements OnInstantiation {
+export class UserRouter {
   constructor(
-    private readonly express: ExpressClient, 
-    private readonly prisma: Prisma,
-  ){}
+    private readonly express: ExpressClient,
+    private readonly prisma: Prisma
+  ) {}
 
-  onInstantiation(){
-    this.express.get("/users", async (req, res) => {
-      const users = await this.prisma.users.findMany();
+  register() {
+    this.express.app.get("/users", async (_, res) => {
+      const users = await this.prisma.user.findMany();
       res.json(users);
     });
   }
 }
 
-
 @Injectable()
 export class MyApplication implements OnInstantiation {
-  constructor(private readonly express: ExpressClient){}
+  constructor(
+    private readonly express: ExpressClient,
+    private readonly userRouter: UserRouter
+  ) {}
 
   private port = 3000;
 
   onInstantiation() {
+    this.userRouter.register();
     this.express.app.listen(this.port, () => {
       console.log("Listening on port", this.port);
-    })
+    });
   }
-
 }
 
-
-async function main(){
-  const container = await createContainer().init();
+async function main() {
+  await createContainer(MyApplication).init();
 }
 
+main();
 ```
