@@ -6,12 +6,10 @@ export interface DIContainer {
   init(): Promise<void>;
 }
 
-export const createContainer = async <T>(
-  root: Type<T>
-): Promise<DIContainer> => {
+export const createContainer = <T>(root: Type<T>): DIContainer => {
   const container = new Map<Type, any>();
 
-  const instantiateDeps = (token: Type): Promise<unknown> => {
+  const instantiateDeps = (token: Type): unknown => {
     if (!Reflect.hasMetadata(INJECTABLE_METADATA, token)) {
       throw new Error(
         "Trying to inject a dependency which is not annotated with the @Injectable decorator"
@@ -19,9 +17,13 @@ export const createContainer = async <T>(
     }
     const dependencyMetadata: Type[] =
       Reflect.getMetadata(INJECTABLE_METADATA, token) ?? [];
-    const instance =
-      container.get(token) ??
-      new token(...dependencyMetadata.map((it) => instantiateDeps(it)));
+    if (container.get(token)) {
+      return container.get(token);
+    }
+
+    const instance = new token(
+      ...dependencyMetadata.map((it) => instantiateDeps(it))
+    );
     container.set(token, instance);
     return instance;
   };

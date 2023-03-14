@@ -52,7 +52,7 @@ describe("slim-di", () => {
   let container: DIContainer;
 
   beforeEach(async () => {
-    container = await createContainer(Root);
+    container = createContainer(Root);
   });
 
   it("Instantiates the classes correctly", () => {

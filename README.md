@@ -80,10 +80,10 @@ Here is a small example using an express server and prisma.
 ```ts
 import { Injectable } from 'slim-di';
 import express from 'express';
-import { PrismaClient } from 'prisma';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
-export class Prisma extends Prisma implements OnInstantiation {
+export class Prisma extends PrismaClient implements OnInstantiation {
   async onInstantiation() {
     await this.$connect();
   }
@@ -91,7 +91,7 @@ export class Prisma extends Prisma implements OnInstantiation {
 
 @Injectable()
 export class ExpressClient {
-  private app = express();
+  public app = express();
 }
 
 
