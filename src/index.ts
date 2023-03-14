@@ -1,1 +1,4 @@
-export const mod = "hello world";
+import "reflect-metadata";
+
+export { Inject } from "./inject";
+export { Injectable } from "./injectable";
