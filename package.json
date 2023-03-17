@@ -1,6 +1,6 @@
 {
   "name": "slim-di",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Minimal dependency injection framework using decorators",
   "main": "./dist/index.cjs",
   "exports": {
