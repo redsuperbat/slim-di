@@ -35,7 +35,7 @@ export const createContainer = <T>(root: Type<T>): DIContainer => {
       return container.get(token);
     },
     async init() {
-      for (const [, instance] of container.entries()) {
+      for (const instance of container.values()) {
         if (!hasInstantiationHook(instance)) continue;
         await instance.onInit();
       }

@@ -69,7 +69,7 @@ describe("slim-di", () => {
     ).rejects.toBeInstanceOf(RangeError);
   });
 
-  it("Should trigger the onInstantiation hook", async () => {
+  it("Should trigger the onInit hook", async () => {
     const dog = container.get(Dog);
     expect(dog.counter).toBe(0);
     await container.init();

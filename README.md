@@ -85,7 +85,7 @@ import "reflect-metadata";
 import { PrismaClient } from "@prisma/client";
 import express from "express";
 import { createContainer, Injectable } from "slim-di";
-import { OnInit } from "slim-di/types";
+import { OnInit } from "slim-di";
 
 @Injectable()
 export class Prisma extends PrismaClient implements OnInit {
