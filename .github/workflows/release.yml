@@ -8,6 +8,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: Check if version has been updated
         id: check 
         uses: EndBug/version-check@v2
@@ -21,7 +22,6 @@ jobs:
     if: ${{ needs.check.outputs.result == 'true' }}
     steps:
       - uses: actions/checkout@v3
-
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
