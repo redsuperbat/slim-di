@@ -16,7 +16,7 @@ jobs:
       result: ${{ steps.check.outputs.changed }}
 
 
-  build:
+  publish:
     runs-on: ubuntu-latest
     needs: check
     if: ${{ needs.check.outputs.result == 'true' }}
