@@ -64,9 +64,7 @@ describe("slim-di", () => {
   });
 
   it("Should not be able to create circular references", async () => {
-    await expect(() =>
-      createContainer(SelfReferencingRoot)
-    ).rejects.toBeInstanceOf(RangeError);
+    expect(() => createContainer(SelfReferencingRoot)).toThrowError(RangeError);
   });
 
   it("Should trigger the onInit hook", async () => {
